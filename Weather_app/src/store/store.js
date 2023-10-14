@@ -4,6 +4,6 @@ import listReducer from './slice.js'
 
 export const store = configureStore({
     reducer: {
-        list: listReducer,
+        data: listReducer,
     },
 })

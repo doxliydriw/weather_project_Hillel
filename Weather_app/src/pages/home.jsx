@@ -1,10 +1,11 @@
 import React from 'react';
 import Auth from '../components/auth';
+import Request from '../components/apiRequest';
  
 function Home() {
     return (
         <>
-            <h1>This is a homepage of the weather application</h1>
+            <h2>This is a homepage of the weather application</h2>
         </>
     );
 };
