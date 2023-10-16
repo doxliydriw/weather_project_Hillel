@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 function Root() {
     return (
              <Box sx={{ width: '100%' }}>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                         <Grid item xs={12}>
                             <Nav />
                         </Grid>    
@@ -19,11 +19,11 @@ function Root() {
                             <Grid item xs={3}>
                                 <LeftSideBar />
                             </Grid>
-                            <Grid item xs={9}>
-                                            <main>
+                            <Grid item xs={9} rowGap={3}>
+                                            <div>
                                                 <Outlet/>
-                                            </main>
-                            </Grid>
+                                            </div>
+                            </Grid> 
                         </Grid>
                 </Grid>
             </Box>

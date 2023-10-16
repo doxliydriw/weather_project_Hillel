@@ -7,11 +7,7 @@ const Data = {
     },
     users: [],
     loggedIn: false,
-    requestedFromApi: {
-        Latitude: '',
-        Longitude: '',
-        inputDate: '',
-    },
+    requestedFromApi: {},
     apiResult: {}
 }
 
@@ -29,11 +25,11 @@ export const usersSlice = createSlice({
             state.users = action.payload
         },
         SET_TOKEN: (state, action) => {
-            console.log('inside reducer TOKEN', action.payload)
+            // console.log('inside reducer TOKEN', action.payload)
             state.token = action.payload
         },
         SET_PARAMS: (state, action) => {
-            console.log('inside reducer PARAMS', action.payload)
+            // console.log('inside reducer PARAMS', action.payload)
             state.requestedFromApi = action.payload
         },
         LOGIN_CHANGE: (state, action) => {
@@ -41,7 +37,7 @@ export const usersSlice = createSlice({
         },
         SET_API_RESULT:
             (state, action) => {
-                console.log('inside reducer API RESULT', action.payload)
+                // console.log('inside reducer API RESULT', action.payload)
                 state.apiResult = action.payload
             }
     }

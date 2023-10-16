@@ -21,32 +21,34 @@ const rows = [
 export default function ResultTable() {
   const paramsset = useSelector(state => state.data.requestedFromApi)
   const apiResult = useSelector(state => state.data.apiResult)
-  console.log(paramsset)
-  console.log(apiResult);
+  // console.log(paramsset)
+  // console.log(apiResult);
   return (
-    <p>TEST</p>
-    // <TableContainer component={Paper} className='mt-2'>
-    //   <Table sx={{ minWidth: 650 }} aria-label="simple table">
-    //     <TableHead>
-    //       <TableRow>
-    //         <TableCell>Requested place: {paramsset.Latitude} - {paramsset.Longitude}</TableCell>
-    //         <TableCell align="right">results</TableCell>
-    //       </TableRow>
-    //     </TableHead>
-    //     <TableBody>
-    //       {apiResult.data.map((el) => (
-    //         <TableRow
-    //           key={el.parametr}
-    //           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-    //         >
-    //           <TableCell component="th" scope="row">
-    //             {el.parametr}
-    //           </TableCell>
-    //           <TableCell align="right">{el.coordinates[0].dates[0].value}</TableCell>
-    //         </TableRow>
-    //       ))}
-    //     </TableBody>
-    //   </Table>  
-    // </TableContainer>
+    <TableContainer component={Paper} className='mt-2'>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Requested place: {paramsset.latitude} - {paramsset.longitude}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Requested date: {paramsset.date_time}</TableCell>
+            <TableCell align="right">results</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {apiResult.data.map((el) => (
+            <TableRow
+              key={el.parameter}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {el.parameter}
+              </TableCell>
+              <TableCell align="right">{el.coordinates[0].dates[0].value}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>  
+    </TableContainer>
   );
 }
