@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,7 +21,9 @@ function Nav() {
     const loginStatus = useSelector(state => state.data.loggedIn)
                 const dispatch = useDispatch();
                 const [auth, setAuth] = React.useState(loginStatus);
-                const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const navigate = useNavigate();
+
 
     const handleChange = (event) => {
                     dispatch(LOGIN_CHANGE(!auth));
@@ -62,7 +64,8 @@ function Nav() {
                                                 edge="start"
                                                 color="inherit"
                                                 aria-label="menu"
-                                                sx={{ mr: 2 }}
+                                            sx={{ mr: 2 }}
+                                            onClick={() => (navigate('/'))}
                                             >
                                                 <MenuIcon />
                                         </IconButton>

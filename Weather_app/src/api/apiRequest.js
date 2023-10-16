@@ -5,4 +5,5 @@ export async function apiRequest(token, param) {
     const response = await fetch(url)
     const data = await response.json();
     console.log(data);
+    return data
 }

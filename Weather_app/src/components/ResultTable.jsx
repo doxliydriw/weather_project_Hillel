@@ -8,48 +8,45 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useSelector } from 'react-redux';
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(name, param) {
+  return { name, param };
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Frozen yoghurt', 159),
+  createData('Ice cream sandwich', 237),
+  createData('Eclair', 262),
 ];
 
 export default function ResultTable() {
   const paramsset = useSelector(state => state.data.requestedFromApi)
+  const apiResult = useSelector(state => state.data.apiResult)
   console.log(paramsset)
-
+  console.log(apiResult);
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>{paramset.Latitude} {paramset.Longtitude}</TableCell>
-            <TableCell align="right">Calories</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <p>TEST</p>
+    // <TableContainer component={Paper} className='mt-2'>
+    //   <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    //     <TableHead>
+    //       <TableRow>
+    //         <TableCell>Requested place: {paramsset.Latitude} - {paramsset.Longitude}</TableCell>
+    //         <TableCell align="right">results</TableCell>
+    //       </TableRow>
+    //     </TableHead>
+    //     <TableBody>
+    //       {apiResult.data.map((el) => (
+    //         <TableRow
+    //           key={el.parametr}
+    //           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    //         >
+    //           <TableCell component="th" scope="row">
+    //             {el.parametr}
+    //           </TableCell>
+    //           <TableCell align="right">{el.coordinates[0].dates[0].value}</TableCell>
+    //         </TableRow>
+    //       ))}
+    //     </TableBody>
+    //   </Table>  
+    // </TableContainer>
   );
 }

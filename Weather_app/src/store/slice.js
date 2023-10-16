@@ -11,7 +11,8 @@ const Data = {
         Latitude: '',
         Longitude: '',
         inputDate: '',
-    }
+    },
+    apiResult: {}
 }
 
 export const usersSlice = createSlice({
@@ -37,10 +38,15 @@ export const usersSlice = createSlice({
         },
         LOGIN_CHANGE: (state, action) => {
             state.loggedIn = action.payload
-        }
+        },
+        SET_API_RESULT:
+            (state, action) => {
+                console.log('inside reducer API RESULT', action.payload)
+                state.apiResult = action.payload
+            }
     }
 })
 
-export const { ADD_USER, ADDDELETE_ENTRY_ENTRY, UPDATE_USER_PLACES, SET_TOKEN, SET_PARAMS, LOGIN_CHANGE } = usersSlice.actions
+export const { ADD_USER, ADDDELETE_ENTRY_ENTRY, UPDATE_USER_PLACES, SET_TOKEN, SET_PARAMS, LOGIN_CHANGE, SET_API_RESULT } = usersSlice.actions
 
 export default usersSlice.reducer

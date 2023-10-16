@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { apiRequest } from '../api/api_request';
+import { apiRequest } from '../api/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
@@ -14,7 +14,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-import { SET_PARAMS } from '../store/slice';
+import { SET_API_RESULT, SET_PARAMS } from '../store/slice';
 import { mmLogin } from '../api/mm_login';
 import { useNavigate } from 'react-router';
 
@@ -31,19 +31,24 @@ function Request() {
 
 
     const handleRequest = () => {
-        if (!Latitude || !Longitude || !inputDate) {
-            console.log('Please enter coordinates')
-        } else {
-            let params =  {
-                Latitude: Latitude,
-                Longitude: Longitude,
-                inputDate: inputDate,
-            }
-            dispatch(SET_PARAMS(params))
-            mmLogin(token).then(result => { apiRequest(result, params) });
-            navigate('/result')
-        }
-    }
+                                    if (!Latitude || !Longitude || !inputDate) {
+                                    console.log('Please enter coordinates')
+                                    } else {
+                                            let params =  {
+                                                Latitude: Latitude,
+                                                Longitude: Longitude,
+                                                inputDate: inputDate,
+                                            }
+                                            dispatch(SET_PARAMS(params))
+                                            mmLogin(token).then(result => {
+                                                                            apiRequest(result, params)
+                                                                                .then(result => {
+                                                                                                dispatch(SET_API_RESULT(result))
+                                                                                                navigate('/result')
+                                                                                                })
+                                                                            });
+                                             }
+                                }
 
     return (
         <LocalizationProvider dateAdapter={AdapterMoment}>

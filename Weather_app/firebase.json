@@ -1,0 +1,11 @@
+{
+  "database": {
+    "rules": ".json"
+  },
+
+  "hosting": {
+    "site": "weatherapp-3c67a",
+
+    "public": "dist"
+  }
+}
