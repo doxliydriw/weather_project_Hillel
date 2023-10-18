@@ -32,7 +32,8 @@ export const usersSlice = createSlice({
             // console.log('inside reducer PARAMS', action.payload)
             state.requestedFromApi = action.payload
         },
-        LOGIN_CHANGE: (state, action) => {
+        LOGIN_STATUS_CHANGE: (state, action) => {
+            console.log('inside reducer LOGIN CHECK', action.payload)
             state.loggedIn = action.payload
         },
         SET_API_RESULT:
@@ -43,6 +44,6 @@ export const usersSlice = createSlice({
     }
 })
 
-export const { ADD_USER, ADDDELETE_ENTRY_ENTRY, UPDATE_USER_PLACES, SET_TOKEN, SET_PARAMS, LOGIN_CHANGE, SET_API_RESULT } = usersSlice.actions
+export const { ADD_USER, ADDDELETE_ENTRY_ENTRY, UPDATE_USER_PLACES, SET_TOKEN, SET_PARAMS, LOGIN_STATUS_CHANGE, SET_API_RESULT } = usersSlice.actions
 
 export default usersSlice.reducer

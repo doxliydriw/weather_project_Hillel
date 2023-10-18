@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -14,44 +14,56 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { Button, Grid, Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { LOGIN_CHANGE } from '../store/slice';
- 
+import { LOGIN_STATUS_CHANGE } from '../store/slice';
+import { getAuth, signOut } from "firebase/auth";
+import { auth } from '../config/firebase';
 
 function Nav() {
+    const user = auth.currentUser;
     const loginStatus = useSelector(state => state.data.loggedIn)
-                const dispatch = useDispatch();
-                const [auth, setAuth] = React.useState(loginStatus);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const dispatch = useDispatch();
+    const [checked, setChecked] = useState(loginStatus);
+    const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
+    const LogOut = (event) => {
+                                // console.log(auth.currentUser.email);
+                                signOut(auth).then(() => {
+                                                            console.log('LOGGED OUT')
+                                                            dispatch(LOGIN_STATUS_CHANGE(!checked));
+                                                            // console.log('loginstatus', loginStatus);
+                                                         }).catch((error) => {
+                                                                                console.log(error)
+                                                                            }
+                                                    );                                
+                            };
+    const handleMenu = (event) => {
+                                setAnchorEl(event.currentTarget);
+                                };
 
+    const handleClose = () => {
+                                setAnchorEl(null);
+                            };
+    
 
-    const handleChange = (event) => {
-                    dispatch(LOGIN_CHANGE(!auth));
-                    setAuth(!auth);
-                    // console.log(loginStatus);
-                };
+    useEffect(() => {
+                        setChecked(loginStatus);
+                    }, [loginStatus]);
 
-                const handleMenu = (event) => {
-                    setAnchorEl(event.currentTarget);
-                };
-
-                const handleClose = () => {
-                    setAnchorEl(null);
-                };
-
+    
                 return (
                     <Box sx={{ flexGrow: 1 }}>
                         
                                 <FormGroup>
                                     <FormControlLabel
                                     control={
-                                        <Switch
-                                        checked={auth}
-                                        onChange={handleChange}
+                                    <Switch
+                                        disabled={!checked}
+                                        checked={checked}
+                                        onChange={LogOut}
                                         aria-label="login switch"
                                         />
                                     }
-                                    label={auth ? 'Logout' : 'Login'}
+                                    label={checked ? 'Logout' : 'Login'}
                                     />
                         </FormGroup>
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -76,13 +88,13 @@ function Nav() {
                                         </Typography>
                                     </Grid>
                                      <Grid item xs={2}>
-                                                {!auth && (
+                                                {!checked && (
                                                 <Stack direction="column" spacing={2}>
                                                         <NavLink to='/login'><Button variant="contained">Log in page</Button></NavLink>
-                                                        <NavLink to='/register'><Button variant="contained">Register</Button></NavLink>
+                                                        <NavLink to='/register'><Button variant="contained">Register page</Button></NavLink>
                                                 </Stack>
                                                 )}
-                                                {auth && (
+                                                {checked && (
                                                     <div>
                                                         <IconButton
                                                             size="large"
@@ -92,7 +104,7 @@ function Nav() {
                                                             onClick={handleMenu}
                                                             color="inherit"
                                                         >
-                                                            <AccountCircle />
+                                                    <AccountCircle />
                                                         </IconButton>
                                                                     <Menu
                                                                     id="menu-appbar"
@@ -111,7 +123,8 @@ function Nav() {
                                                                     >
                                                                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                                                                         <MenuItem onClick={handleClose}>My account</MenuItem>
-                                                                    </Menu>
+                                                </Menu>
+                                                {user && (<p>Hello, {auth.currentUser.email}</p>)}
                                                     </div>
                                         )}
                                         </Grid>

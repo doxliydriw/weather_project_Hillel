@@ -12,11 +12,12 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import Root from './components/root';
 import Home from './pages/home';
 import ErrorPage from "./error-page";
-import Login from './pages/login';
+import Login from './pages/userLogin';
 import { mmLogin } from './api/mm_login';
 import { SET_TOKEN } from './store/slice';
 import { apiRequest } from './api/apiRequest';
 import ResultTable from './components/ResultTable';
+import Register from './pages/userRegister';
 
 
 function App() {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
                                   {
                                     path: "/login",
                                     element: <Login/>,
+                        },
+                                  {
+                                    path: "/register",
+                                    element: <Register/>,
                                   },
                                   {
                                     path: "/result",

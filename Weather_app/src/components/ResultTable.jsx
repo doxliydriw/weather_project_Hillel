@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useSelector } from 'react-redux';
+import { find_match } from '../store/find_match';
 
 function createData(name, param) {
   return { name, param };
@@ -21,17 +22,17 @@ const rows = [
 export default function ResultTable() {
   const paramsset = useSelector(state => state.data.requestedFromApi)
   const apiResult = useSelector(state => state.data.apiResult)
-  // console.log(paramsset)
-  // console.log(apiResult);
+  console.log(paramsset)
+  console.log(apiResult);
   return (
-    <TableContainer component={Paper} className='mt-2'>
+    <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Requested place: {paramsset.latitude} - {paramsset.longitude}</TableCell>
+            <TableCell>Requested place: {paramsset.latitude.number} - {paramsset.longitude.number}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Requested date: {paramsset.date_time}</TableCell>
+            <TableCell>Requested date: {paramsset.date_time.number}</TableCell>
             <TableCell align="right">results</TableCell>
           </TableRow>
         </TableHead>
@@ -42,7 +43,7 @@ export default function ResultTable() {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {el.parameter}
+                {find_match(paramsset, el)}
               </TableCell>
               <TableCell align="right">{el.coordinates[0].dates[0].value}</TableCell>
             </TableRow>

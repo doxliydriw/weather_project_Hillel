@@ -1,5 +1,5 @@
 import React from 'react';
-import Auth from '../components/auth';
+import Auth from '../components/SignUP';
 import Request from '../components/apiRequest';
  
 function Home() {

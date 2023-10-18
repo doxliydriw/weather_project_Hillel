@@ -13,15 +13,16 @@ import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
     apiKey: "AIzaSyCOFomI6p-TeS1w-y8WrMTW26xSlmrSn5A",
     authDomain: "hillel-89bfe.firebaseapp.com",
+    databaseURL: "https://hillel-89bfe-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "hillel-89bfe",
     storageBucket: "hillel-89bfe.appspot.com",
     messagingSenderId: "939918470167",
-    appId: "1:939918470167:web:73b1e95cfc81896c578052",
-    measurementId: "G-833GCQLT10"
+    appId: "1:939918470167:web:43d7a7e91303ca98578052",
+    measurementId: "G-73NJPTXJYD"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getFirestore(app);

@@ -1,11 +1,11 @@
 import React from 'react';
-import Auth from '../components/auth';
+import SignIn from '../components/SignIN';
  
 function Login() {
     return (
         <>
             <h1>This is a LOGIN PAGE of the weather application</h1>
-            <Auth/>
+            <SignIn/>
         </>
     );
 };

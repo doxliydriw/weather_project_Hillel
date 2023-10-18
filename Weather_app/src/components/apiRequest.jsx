@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { apiRequest } from '../api/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -86,6 +86,70 @@ function Request() {
                                                 },
     });
 
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    useEffect(() => {
+        // console.log('refresh')
+        // console.log(isSubmitted)
+        setFormState({
+                                                date_time: {
+                                                    number: '',
+                                                    textfield: 'Requested date:'
+                                                },
+                                                latitude: {
+                                                    number: '',
+                                                    textfield: 'Latitude, deg.:'
+                                                },
+                                                longitude: {
+                                                    number: '',
+                                                    textfield: 'Longitude, deg.:'
+                                                },
+                                                checkbox1: {
+                                                    state: false,
+                                                    id: 'wind_speed_10m:ms',
+                                                    textfield: 'Wind speed, m/s'
+                                                },
+                                                checkbox2: 
+                                                    {
+                                                    state: false,
+                                                    id: 'wind_dir_10m:d',
+                                                    textfield: 'Wind direction, deg.'
+
+                                                },
+                                                checkbox3: 
+                                                    {
+                                                    state: false,
+                                                    id: 't_2m:C',
+                                                    textfield: 'Temperature, C'
+
+                                                },
+                                                checkbox4: 
+                                                    {
+                                                    state: false,
+                                                    id: 'msl_pressure:hPa',
+                                                    textfield: 'Mean pressure, hPa'
+
+                                                },
+                                                checkbox5: 
+                                                    {
+                                                    state: false,
+                                                    id: 'sunrise:sql',
+                                                    textfield: 'Sunrise'
+
+                                                },
+                                                checkbox6: 
+                                                {
+                                                    state: false,
+                                                    id: 'sunset:sql',
+                                                    textfield: 'Sunset'
+
+                                                },
+    })
+        setIsSubmitted(false);
+        // console.log(formState)
+  }, [isSubmitted]);
+
+
     const handleInputChange = (event) => {
         const target = event.target;
         const name = target.name;
@@ -101,11 +165,11 @@ function Request() {
             // const value = target.type === 'checkbox' ? target.checked : target.value;
             // const name = target.name;
         } else {
-            const value = target.value;
-            setFormState({
-                ...formState,
-                [name]: value
-            });
+            const value = target.value; 
+            setFormState(prevState => ({
+            ...prevState,
+            [name]: { ...prevState[name], number: value }
+            }));
         }
     };
 
@@ -116,9 +180,10 @@ function Request() {
 
 
     const handleRequest = (event) => {
-                                    event.preventDefault();
-                                    if (!formState.latitude || !formState.longitude || !formState.date_time) {
-                                    console.log('Please enter coordinates')
+        event.preventDefault();
+        // console.log(formState)
+                                    if (!formState.latitude.number || !formState.longitude.number || !formState.date_time.number) {
+                                        alert('Please enter coordinates')
                                     } else {
                                             let params =  formState
                                             dispatch(SET_PARAMS(params))
@@ -126,6 +191,7 @@ function Request() {
                                                                             apiRequest(result, params)
                                                                                 .then(result => {
                                                                                                 dispatch(SET_API_RESULT(result))
+                                                                                                setIsSubmitted(true);
                                                                                                 navigate('/result')
                                                                                                 })
                                                                             });
@@ -133,24 +199,25 @@ function Request() {
                                 }
 
     return (
-        <LocalizationProvider dateAdapter={AdapterMoment}>
+        // <LocalizationProvider dateAdapter={AdapterMoment}>
             <Box
                 // 
                 sx={{'& > :not(style)': { m: 1, width: '25ch' },}}
-                noValidate
+                // noValidate
                 autoComplete="off"
                 >
-                    <Stack spacing={2} direction="column">
+                    <Stack direction="column">
                     <p>Example Paris, Ile-de-France, France: <br /> Latitude: 48.8588897 <br /> Longitude: 2.320041</p>
                     <FormGroup>
-                        <input hidden type="text" />
+                        {/* <input hidden type="text" /> */}
                         <TextField
-                            id="outlined-basic"
-                            label="Input date"
+                            id="date_time"
+                            // label="Input date"
                             name="date_time"
                             placeholder='YYYY-MM-DD'
-                            // value={}
+                            value={formState.date_time.number}
                             onChange={handleInputChange}
+                        
                             // onChange={(e) => setInputDate(e.target.value)}
                         />
                                 {/* <DatePicker
@@ -159,30 +226,41 @@ function Request() {
                                     label="Insert date"
                                 /> */}
                         <TextField
-                            id="outlined-basic"
-                            label="Latitude"
+                            id="latitude"
+                            // label="Latitude"
                             variant="outlined"
                             name="latitude"
                             placeholder='Latitude'
-                            // value={formState.latitude}
+                            value={formState.latitude.number}
                             onChange={handleInputChange}
                             // onChange={(e) => setLatitude(e.target.value)}
                         />
                         <TextField
-                            id="outlined-basic"
-                            label="Longitude"
+                            id="longitude"
+                            // label="Longitude"
                             variant="outlined"
                             name="longitude"
                             placeholder='Longitude'
-                            // value={formState.longitude}
+                            value={formState.longitude.number}
                             onChange={handleInputChange}
-                        />
+                    />
+                        <FormControlLabel
+                                    type="checkbox"
+                                    name="checkbox3"
+                                    value="t_2m:C"
+                                    checked={formState.checkbox3.state}
+                                    control={<Checkbox />}
+                                    label="Temperature, C"
+                                    labelPlacement="end"
+                                    onChange={handleInputChange}
+                                />
                         {loginStatus && (
-                            <Stack spacing={2} direction="column">
+                            <Stack spacing={0} direction="column">
                             <FormControlLabel
                                     type="checkbox"
                                     name="checkbox1"
-                                    value={formState.checkbox1}
+                                    checked={formState.checkbox1.state}
+                                    value="wind_speed_10m:ms"
                                     control={<Checkbox />}
                                     label="Wind speed, m/s"
                                     labelPlacement="end"
@@ -192,6 +270,7 @@ function Request() {
                                     type="checkbox"
                                     name="checkbox2"
                                     value="wind_dir_10m:d"
+                                    checked={formState.checkbox2.state}
                                     control={<Checkbox />}
                                     label="Wind direction, deg."
                                     labelPlacement="end"
@@ -199,17 +278,9 @@ function Request() {
                                 />
                             <FormControlLabel
                                     type="checkbox"
-                                    name="checkbox3"
-                                    value="t_2m:C"
-                                    control={<Checkbox />}
-                                    label="Temperature, C"
-                                    labelPlacement="end"
-                                    onChange={handleInputChange}
-                                />
-                            <FormControlLabel
-                                    type="checkbox"
                                     name="checkbox4"
                                     value="msl_pressure:hPa"
+                                    checked={formState.checkbox4.state}
                                     control={<Checkbox />}
                                     label="Mean pressure, hPa"
                                     labelPlacement="end"
@@ -219,6 +290,7 @@ function Request() {
                                     type="checkbox"
                                     name="checkbox5"
                                     value="sunrise:sql"
+                                    checked={formState.checkbox5.state}
                                     control={<Checkbox />}
                                     label="Sunrise"
                                     labelPlacement="end"
@@ -228,6 +300,7 @@ function Request() {
                                     type="checkbox"
                                     name="checkbox6"
                                     value="sunset:sql"
+                                    checked={formState.checkbox6.state}
                                     control={<Checkbox />}
                                     label="Sunset"
                                     labelPlacement="end"
@@ -239,7 +312,7 @@ function Request() {
                         </FormGroup>
                     </Stack>
             </Box>
-        </LocalizationProvider>
+        // </LocalizationProvider>
    );
 };
 
