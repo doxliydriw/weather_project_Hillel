@@ -57,9 +57,9 @@ function SignIn() {
 
         return (
             <FormGroup>
-                <Stack spacing={1} direction="column" sx={{ maxWidth: 300, }}>
-                    <TextField type="email" placeholder='email' onChange={HandleChange} />
-                    <TextField type="password" placeholder='password' onChange={HandleChange} />
+                <Stack direction="column" sx={{ maxWidth: 300, }}>
+                    <TextField type="email" placeholder='email' margin="dense" onChange={HandleChange} />
+                    <TextField type="password" placeholder='password' margin="dense" onChange={HandleChange} />
                     <Button variant="contained" type="submit" onClick={sign}>Sign In</Button>
                 </Stack>
             </FormGroup>

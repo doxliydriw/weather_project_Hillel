@@ -9,21 +9,12 @@ import Paper from '@mui/material/Paper';
 import { useSelector } from 'react-redux';
 import { find_match } from '../store/find_match';
 
-function createData(name, param) {
-  return { name, param };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159),
-  createData('Ice cream sandwich', 237),
-  createData('Eclair', 262),
-];
 
 export default function ResultTable() {
   const paramsset = useSelector(state => state.data.requestedFromApi)
   const apiResult = useSelector(state => state.data.apiResult)
-  console.log(paramsset)
-  console.log(apiResult);
+  // console.log(paramsset)
+  // console.log(apiResult);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

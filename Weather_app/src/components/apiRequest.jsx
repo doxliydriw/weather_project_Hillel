@@ -13,12 +13,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
 
 import { SET_API_RESULT, SET_PARAMS } from '../store/slice';
 import { mmLogin } from '../api/mm_login';
 import { useNavigate } from 'react-router';
+import { formValidation } from '../api/formValidation';
 
  
 function Request() {
@@ -94,15 +93,18 @@ function Request() {
         setFormState({
                                                 date_time: {
                                                     number: '',
-                                                    textfield: 'Requested date:'
+                                                    textfield: 'Requested date:',
+                                                    // valid: false
                                                 },
                                                 latitude: {
                                                     number: '',
-                                                    textfield: 'Latitude, deg.:'
+                                                    textfield: 'Latitude, deg.:',
+                                                    regex: '^([-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?))$'
                                                 },
                                                 longitude: {
                                                     number: '',
-                                                    textfield: 'Longitude, deg.:'
+                                                    textfield: 'Longitude, deg.:',
+                                                    regex: '^([-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?))$'
                                                 },
                                                 checkbox1: {
                                                     state: false,
@@ -153,7 +155,8 @@ function Request() {
     const handleInputChange = (event) => {
         const target = event.target;
         const name = target.name;
-        // console.log(name)
+        // const dateValid = isDateInRange(target.value);
+        // console.log(dateValid);
         if (target.type === 'checkbox') {
             
             const value = target.checked;
@@ -181,21 +184,22 @@ function Request() {
 
     const handleRequest = (event) => {
         event.preventDefault();
-        // console.log(formState)
-                                    if (!formState.latitude.number || !formState.longitude.number || !formState.date_time.number) {
-                                        alert('Please enter coordinates')
-                                    } else {
-                                            let params =  formState
-                                            dispatch(SET_PARAMS(params))
-                                            mmLogin(token).then(result => {
-                                                                            apiRequest(result, params)
-                                                                                .then(result => {
-                                                                                                dispatch(SET_API_RESULT(result))
-                                                                                                setIsSubmitted(true);
-                                                                                                navigate('/result')
-                                                                                                })
-                                                                            });
-                                             }
+        const validationResult = formValidation(formState);
+        console.log(validationResult.checkbox[0][0]);
+                                    // if (!formState.latitude.number || !formState.longitude.number || !formState.date_time.number) {
+                                    //     alert('Please enter coordinates')
+                                    // } else {
+                                    //         let params =  formState
+                                    //         dispatch(SET_PARAMS(params))
+                                    //         mmLogin(token).then(result => {
+                                    //                                         apiRequest(result, params)
+                                    //                                             .then(result => {
+                                    //                                                             dispatch(SET_API_RESULT(result))
+                                    //                                                             setIsSubmitted(true);
+                                    //                                                             navigate('/result')
+                                    //                                                             })
+                                    //                                         });
+                                    //          }
                                 }
 
     return (
@@ -209,13 +213,13 @@ function Request() {
                     <Stack direction="column">
                     <p>Example Paris, Ile-de-France, France: <br /> Latitude: 48.8588897 <br /> Longitude: 2.320041</p>
                     <FormGroup>
-                        {/* <input hidden type="text" /> */}
                         <TextField
                             id="date_time"
-                            // label="Input date"
+                            label="Input date"
                             name="date_time"
                             placeholder='YYYY-MM-DD'
                             value={formState.date_time.number}
+                            margin="dense"
                             onChange={handleInputChange}
                         
                             // onChange={(e) => setInputDate(e.target.value)}
@@ -227,21 +231,26 @@ function Request() {
                                 /> */}
                         <TextField
                             id="latitude"
-                            // label="Latitude"
+                            label="Latitude"
                             variant="outlined"
                             name="latitude"
                             placeholder='Latitude'
                             value={formState.latitude.number}
+                            margin="dense"
                             onChange={handleInputChange}
                             // onChange={(e) => setLatitude(e.target.value)}
                         />
                         <TextField
                             id="longitude"
-                            // label="Longitude"
+                            // error
+                            // id="outlined-error"
+                            // label="Error"
+                            label="Longitude"
                             variant="outlined"
                             name="longitude"
                             placeholder='Longitude'
                             value={formState.longitude.number}
+                            margin="dense"
                             onChange={handleInputChange}
                     />
                         <FormControlLabel
