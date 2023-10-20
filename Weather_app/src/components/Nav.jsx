@@ -30,11 +30,11 @@ function Nav() {
                                 signOut(auth).then(() => {
                                                             console.log('LOGGED OUT')
                                                             dispatch(LOGIN_STATUS_CHANGE(!checked));
-                                                            // console.log('loginstatus', loginStatus);
-                                                         }).catch((error) => {
+                                                            navigate('/')
+                                                        }).catch((error) => {
                                                                                 console.log(error)
                                                                             }
-                                                    );                                
+                                                        );                                
                             };
     const handleMenu = (event) => {
                                 setAnchorEl(event.currentTarget);

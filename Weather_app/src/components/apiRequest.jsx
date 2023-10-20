@@ -14,7 +14,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-import { SET_API_RESULT, SET_PARAMS } from '../store/slice';
+import { SET_API_RESULT, SET_PARAMS, SET_VALIDATION_FORM } from '../store/slice';
 import { mmLogin } from '../api/mm_login';
 import { useNavigate } from 'react-router';
 import { formValidation } from '../api/formValidation';
@@ -83,7 +83,7 @@ function Request() {
                                                     textfield: 'Sunset'
 
                                                 },
-    });
+                                            });
 
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -146,10 +146,10 @@ function Request() {
                                                     textfield: 'Sunset'
 
                                                 },
-    })
+                        })
         setIsSubmitted(false);
         // console.log(formState)
-  }, [isSubmitted]);
+    }, [isSubmitted]);
 
 
     const handleInputChange = (event) => {
@@ -158,49 +158,71 @@ function Request() {
         // const dateValid = isDateInRange(target.value);
         // console.log(dateValid);
         if (target.type === 'checkbox') {
-            
             const value = target.checked;
             setFormState(prevState => ({
-            ...prevState,
-            [name]: { ...prevState[name], state: value }
-        }));
-            // console.log(formState)
-            // const value = target.type === 'checkbox' ? target.checked : target.value;
-            // const name = target.name;
-        } else {
-            const value = target.value; 
-            setFormState(prevState => ({
-            ...prevState,
-            [name]: { ...prevState[name], number: value }
+                ...prevState,
+                [name]: { ...prevState[name], state: value }
             }));
+        } else {
+            const value = target.value;
+            // test
+            setFormState(prevState => {
+                    const updatedObject = { ...prevState[name], number: value };
+                    if ('notValid' in updatedObject) {
+                        delete updatedObject.notValid;
+                    }
+                    return {
+                        ...prevState,
+                        [name]: updatedObject
+                };
+                })
+            // //test end below is original
+            // setFormState(prevState => ({
+            //     ...prevState,
+            //     [name]: { ...prevState[name], number: value }
+            // })
+            // );
         }
-    };
-
-//   const handleRequest = (event) => {
-//     event.preventDefault();
-//     console.log(formState);
-//   };
+    }
+        //   const handleRequest = (event) => {
+        //     event.preventDefault();
+        //     console.log(formState);
+        //   };
 
 
     const handleRequest = (event) => {
-        event.preventDefault();
-        const validationResult = formValidation(formState);
-        console.log(validationResult.checkbox[0][0]);
-                                    // if (!formState.latitude.number || !formState.longitude.number || !formState.date_time.number) {
-                                    //     alert('Please enter coordinates')
-                                    // } else {
-                                    //         let params =  formState
-                                    //         dispatch(SET_PARAMS(params))
-                                    //         mmLogin(token).then(result => {
-                                    //                                         apiRequest(result, params)
-                                    //                                             .then(result => {
-                                    //                                                             dispatch(SET_API_RESULT(result))
-                                    //                                                             setIsSubmitted(true);
-                                    //                                                             navigate('/result')
-                                    //                                                             })
-                                    //                                         });
-                                    //          }
-                                }
+            event.preventDefault();
+            //TEST
+            for (let i of Object.keys(formState).filter((el) => !el.includes('check'))) {
+
+            }
+            const validationResult = formValidation(formState);
+            console.log(validationResult)
+            for (let i of Object.keys(validationResult).filter((el) => !el.includes('check'))) {
+                setFormState(prevState => ({
+                    ...prevState,
+                    [i]: {
+                        ...prevState[i],
+                        notValid: !validationResult[i]
+                    }
+                }));
+            }
+            if (!validationResult.checkbox) {
+                alert('No checkbox');
+            }
+            //TEST END
+            if (Object.values(validationResult).every(val => val === true)) {
+                                                                            dispatch(SET_PARAMS(formState))
+                                                                            mmLogin(token).then(result => {
+                                                                                                            apiRequest(result, formState)
+                                                                                                                .then(result => {
+                                                                                                                                dispatch(SET_API_RESULT(result))
+                                                                                                                                setIsSubmitted(true);
+                                                                                                                                navigate('/result')
+                                                                                                                                })
+                                                                                                            });
+                                                                            }
+        }   
 
     return (
         // <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -215,7 +237,8 @@ function Request() {
                     <FormGroup>
                         <TextField
                             id="date_time"
-                            label="Input date"
+                            error={formState.date_time.notValid}
+                            label={formState.date_time.notValid ? "Error" : "Input date"}
                             name="date_time"
                             placeholder='YYYY-MM-DD'
                             value={formState.date_time.number}
@@ -231,7 +254,8 @@ function Request() {
                                 /> */}
                         <TextField
                             id="latitude"
-                            label="Latitude"
+                            error={formState.latitude.notValid}
+                            label={formState.latitude.notValid ? "Error" : "Latitude"}
                             variant="outlined"
                             name="latitude"
                             placeholder='Latitude'
@@ -241,11 +265,9 @@ function Request() {
                             // onChange={(e) => setLatitude(e.target.value)}
                         />
                         <TextField
-                            id="longitude"
-                            // error
-                            // id="outlined-error"
-                            // label="Error"
-                            label="Longitude"
+                            // id="longitude"
+                            error={formState.longitude.notValid}
+                            label={formState.longitude.notValid ? "Error" : "Longitude"}
                             variant="outlined"
                             name="longitude"
                             placeholder='Longitude'
@@ -253,7 +275,7 @@ function Request() {
                             margin="dense"
                             onChange={handleInputChange}
                     />
-                        <FormControlLabel
+                                <FormControlLabel
                                     type="checkbox"
                                     name="checkbox3"
                                     value="t_2m:C"

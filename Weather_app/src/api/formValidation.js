@@ -1,13 +1,8 @@
-
 export function formValidation(el) {
-    const passwordRegex = ''
-    const emailRegex = ''
-    const latitudeRegex = '^([-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?))$'
-    const longitudeRegex = '^([-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?))$'
     let validation = {};
-    console.log(el);
+    // console.log(el);
     for (let i of Object.keys(el)) {
-        console.log(i);
+        // console.log(i);
         switch (i) {
             case 'date_time':
                 validation[i] = isDateInRange(el[i].number);
@@ -20,15 +15,16 @@ export function formValidation(el) {
                 break;
         }
     }
-    validation.checkbox = [Object.keys(el).filter((key) => key.includes('checkbox')).map((i) => el[i].state)];
+    const check = Object.keys(el).filter((key) => key.includes('checkbox')).map((i) => el[i].state).every(value => !value)
+    validation.checkbox = !check
     console.log(validation);
     return validation;
 }
 
 function isDateInRange(dateStr) {
-    console.log(dateStr);
+    // console.log(dateStr);
     const inputDate = new Date(dateStr);
-    console.log(inputDate);
+    // console.log(inputDate);
     if (isNaN(inputDate)) {
         return false;
     }

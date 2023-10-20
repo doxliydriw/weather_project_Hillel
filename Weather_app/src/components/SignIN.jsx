@@ -36,7 +36,7 @@ function SignIn() {
     }
 
     const sign = () => {
-        console.log(form);
+        // console.log(form);
         const email = form.email;
         const password = form.password;
                         signInWithEmailAndPassword(auth, email, password)

@@ -8,7 +8,8 @@ const Data = {
     users: [],
     loggedIn: false,
     requestedFromApi: {},
-    apiResult: {}
+    apiResult: {},
+    validationForm: {}
 }
 
 export const usersSlice = createSlice({
@@ -40,10 +41,15 @@ export const usersSlice = createSlice({
             (state, action) => {
                 // console.log('inside reducer API RESULT', action.payload)
                 state.apiResult = action.payload
-            }
+            },
+        SET_VALIDATION_FORM:
+            (state, action) => {
+                // console.log('inside reducer VALIDATION', action.payload)
+                state.validationForm = action.payload
+            },
     }
 })
 
-export const { ADD_USER, ADDDELETE_ENTRY_ENTRY, UPDATE_USER_PLACES, SET_TOKEN, SET_PARAMS, LOGIN_STATUS_CHANGE, SET_API_RESULT } = usersSlice.actions
+export const { ADD_USER, ADDDELETE_ENTRY_ENTRY, UPDATE_USER_PLACES, SET_TOKEN, SET_PARAMS, LOGIN_STATUS_CHANGE, SET_API_RESULT, SET_VALIDATION_FORM } = usersSlice.actions
 
 export default usersSlice.reducer
