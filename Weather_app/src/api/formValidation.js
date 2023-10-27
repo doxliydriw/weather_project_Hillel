@@ -1,30 +1,35 @@
 export function formValidation(el) {
     let validation = {};
-    // console.log(el);
+    console.log(el);
     for (let i of Object.keys(el)) {
         // console.log(i);
         switch (i) {
             case 'date_time':
-                validation[i] = isDateInRange(el[i].number);
+                validation[i] = isDateInRange(el[i].value);
                 break;
             case 'latitude':
             case 'longitude':
             case 'password':
             case 'email':
+            case 'name':
+            case 'phone':
+            case 'url':
+
                 validation[i] = isValidElement(el[i])
+                // console.log(validation[i])
                 break;
         }
     }
-    const check = Object.keys(el).filter((key) => key.includes('checkbox')).map((i) => el[i].state).every(value => !value)
-    validation.checkbox = !check
-    console.log(validation);
+    if (Object.keys(el).some((e) => e.includes('checkbox'))) {
+        const check = Object.keys(el).filter((key) => key.includes('checkbox')).map((i) => el[i].state).every(value => !value)
+        validation.checkbox = !check
+    }
+    // console.log(validation);
     return validation;
 }
 
 function isDateInRange(dateStr) {
-    // console.log(dateStr);
     const inputDate = new Date(dateStr);
-    // console.log(inputDate);
     if (isNaN(inputDate)) {
         return false;
     }
@@ -37,7 +42,8 @@ function isDateInRange(dateStr) {
 
 
 function isValidElement(el) {
+    // console.log(typeof (el.regex));
     let regex = new RegExp(el.regex);
-    let str = el.number;
+    let str = el.value;
     return regex.test(str);
 }

@@ -4,7 +4,7 @@ async function fetchToken() {
     let headers = new Headers();
     const username = 'privatperson_demidas_konstantin'
     const password = 'x9w5yYM7X1'
-    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password), 'no cors');
     // console.log('getting token');
     let resp = await fetch('https://login.meteomatics.com/api/v1/token', {
         method: 'GET', headers: headers

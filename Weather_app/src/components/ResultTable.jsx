@@ -20,10 +20,10 @@ export default function ResultTable() {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Requested place: {paramsset.latitude.number} - {paramsset.longitude.number}</TableCell>
+            <TableCell>Requested place: {paramsset.latitude.value} - {paramsset.longitude.value}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Requested date: {paramsset.date_time.number}</TableCell>
+            <TableCell>Requested date: {paramsset.date_time.value}</TableCell>
             <TableCell align="right">results</TableCell>
           </TableRow>
         </TableHead>

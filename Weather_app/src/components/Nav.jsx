@@ -124,7 +124,7 @@ function Nav() {
                                                                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                                                                         <MenuItem onClick={handleClose}>My account</MenuItem>
                                                 </Menu>
-                                                {user && (<p>Hello, {auth.currentUser.email}</p>)}
+                                                {user && (<p>Hello, {auth.currentUser.displayName}</p>)}
                                                     </div>
                                         )}
                                         </Grid>

@@ -6,22 +6,40 @@ import { Button, FormGroup, Stack, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { LOGIN_STATUS_CHANGE } from '../store/slice';
 import { useNavigate } from 'react-router';
+import { formValidation } from '../api/formValidation';
 
 function SignIn() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
 
-    const [form, setForm] = useState({
-        email: "",
-        password: ""
+    const [formState, setFormState] = useState({
+        email: {
+            value: '',
+            regex: /^([a-zA-Z0-9_.-]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9.-]+)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+        },
+        password: {
+            value: '',
+            regex: /^.{8,}$/
+        }
     })
 
     const HandleChange = e => {
-        setForm({
-            ...form,
-            [e.target.type]: e.target.value
+        const target = e.target;
+        const name = target.name;
+        const value = target.value;
+        // console.log(name, value)
+        setFormState(prevState => {
+                const updatedObject = { ...prevState[name], value: value };
+                if ('notValid' in updatedObject) {
+                    delete updatedObject.notValid;
+                }
+                return {
+                    ...prevState,
+                    [name]: updatedObject
+                };
         })
+        // console.log(formState)
     }
 
     const AuthStatusCheck = () => {
@@ -35,33 +53,62 @@ function SignIn() {
         });
     }
 
-    const sign = () => {
-        // console.log(form);
-        const email = form.email;
-        const password = form.password;
-                        signInWithEmailAndPassword(auth, email, password)
-                            .then((userCredential) => {
-                                // Signed in 
-                                const user = userCredential.user;
-                                console.log(user, 'LOGGED IN');
-                                AuthStatusCheck();
-                                navigate('/')
+    const sign = (event) => {
+        event.preventDefault();
+        const email = formState.email.value;
+        const password = formState.password.value;
+        const validationResult = formValidation(formState);
+        for (let i of Object.keys(validationResult)) {
+            setFormState(prevState => ({
+                ...prevState,
+                [i]: {
+                    ...prevState[i],
+                    notValid: !validationResult[i]
+                }
+            }));
+        }
+        console.log(validationResult, email, password)
 
-                            })
-                            .catch((error) => {
-                                const errorCode = error.code;
-                                const errorMessage = error.message;
-                                console.log(errorCode, errorMessage);
-                            });
-                        }
+        if (Object.values(validationResult).every(val => val === true)) {
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    AuthStatusCheck();
+                    navigate('/')
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert('No such USER in Firebase')
+                    console.log(errorCode, errorMessage);
+                });
+        }
+    }
 
-        return (
-            <FormGroup>
+    return (
+        <FormGroup>
+            <form onSubmit={sign}>
                 <Stack direction="column" sx={{ maxWidth: 300, }}>
-                    <TextField type="email" placeholder='email' margin="dense" onChange={HandleChange} />
-                    <TextField type="password" placeholder='password' margin="dense" onChange={HandleChange} />
-                    <Button variant="contained" type="submit" onClick={sign}>Sign In</Button>
+                    <TextField
+                        error={formState.email.notValid}
+                        label={formState.email.notValid ? "Error" : "Input email"}
+                        name='email'
+                        type="email"
+                        placeholder='email'
+                        margin="dense"
+                        onChange={HandleChange} />
+                    <TextField
+                        error={formState.password.notValid}
+                        label={formState.password.notValid ? "Error" : "Input password"}
+                        name='password'
+                        type="password"
+                        placeholder='password'
+                        margin="dense"
+                        onChange={HandleChange} />
+                    <Button variant="contained" type="submit">Sign In</Button>
                 </Stack>
+            </form>
             </FormGroup>
         );
     };

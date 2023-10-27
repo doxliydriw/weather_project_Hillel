@@ -32,16 +32,19 @@ function Request() {
 
     const [formState, setFormState] = useState({
                                                 date_time: {
-                                                    number: '',
-                                                    textfield: 'Requested date:'
+                                                    value: '',
+                                                    textfield: 'Requested date:',
+                                                    // valid: false
                                                 },
                                                 latitude: {
-                                                    number: '',
-                                                    textfield: 'Latitude, deg.:'
+                                                    value: '',
+                                                    textfield: 'Latitude, deg.:',
+                                                    regex: '^([-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?))$'
                                                 },
                                                 longitude: {
-                                                    number: '',
-                                                    textfield: 'Longitude, deg.:'
+                                                    value: '',
+                                                    textfield: 'Longitude, deg.:',
+                                                    regex: '^([-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?))$'
                                                 },
                                                 checkbox1: {
                                                     state: false,
@@ -92,17 +95,17 @@ function Request() {
         // console.log(isSubmitted)
         setFormState({
                                                 date_time: {
-                                                    number: '',
+                                                    value: '',
                                                     textfield: 'Requested date:',
                                                     // valid: false
                                                 },
                                                 latitude: {
-                                                    number: '',
+                                                    value: '',
                                                     textfield: 'Latitude, deg.:',
                                                     regex: '^([-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?))$'
                                                 },
                                                 longitude: {
-                                                    number: '',
+                                                    value: '',
                                                     textfield: 'Longitude, deg.:',
                                                     regex: '^([-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?))$'
                                                 },
@@ -167,7 +170,7 @@ function Request() {
             const value = target.value;
             // test
             setFormState(prevState => {
-                    const updatedObject = { ...prevState[name], number: value };
+                    const updatedObject = { ...prevState[name], value: value };
                     if ('notValid' in updatedObject) {
                         delete updatedObject.notValid;
                     }
@@ -179,7 +182,7 @@ function Request() {
             // //test end below is original
             // setFormState(prevState => ({
             //     ...prevState,
-            //     [name]: { ...prevState[name], number: value }
+            //     [name]: { ...prevState[name], value: value }
             // })
             // );
         }
@@ -193,11 +196,11 @@ function Request() {
     const handleRequest = (event) => {
             event.preventDefault();
             //TEST
-            for (let i of Object.keys(formState).filter((el) => !el.includes('check'))) {
+            // for (let i of Object.keys(formState).filter((el) => !el.includes('check'))) {
 
-            }
+            // }
             const validationResult = formValidation(formState);
-            console.log(validationResult)
+            // console.log(validationResult)
             for (let i of Object.keys(validationResult).filter((el) => !el.includes('check'))) {
                 setFormState(prevState => ({
                     ...prevState,
@@ -208,7 +211,7 @@ function Request() {
                 }));
             }
             if (!validationResult.checkbox) {
-                alert('No checkbox');
+                alert('Please check at least one parameter');
             }
             //TEST END
             if (Object.values(validationResult).every(val => val === true)) {
@@ -241,7 +244,7 @@ function Request() {
                             label={formState.date_time.notValid ? "Error" : "Input date"}
                             name="date_time"
                             placeholder='YYYY-MM-DD'
-                            value={formState.date_time.number}
+                            value={formState.date_time.value}
                             margin="dense"
                             onChange={handleInputChange}
                         
@@ -259,7 +262,7 @@ function Request() {
                             variant="outlined"
                             name="latitude"
                             placeholder='Latitude'
-                            value={formState.latitude.number}
+                            value={formState.latitude.value}
                             margin="dense"
                             onChange={handleInputChange}
                             // onChange={(e) => setLatitude(e.target.value)}
@@ -271,7 +274,7 @@ function Request() {
                             variant="outlined"
                             name="longitude"
                             placeholder='Longitude'
-                            value={formState.longitude.number}
+                            value={formState.longitude.value}
                             margin="dense"
                             onChange={handleInputChange}
                     />
